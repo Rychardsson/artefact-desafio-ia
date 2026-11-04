@@ -108,7 +108,7 @@ uv run --with pytest pytest
 21 passed
 ```
 
-Demonstration scenarios are listed in [`examples/scenarios.json`](examples/scenarios.json). Three real Gemini conversations are available as Markdown transcripts: [`conversation-01-price.md`](examples/conversation-01-price.md), [`conversation-02-policies.md`](examples/conversation-02-policies.md), and [`conversation-03-out-of-scope.md`](examples/conversation-03-out-of-scope.md). The consolidated machine-readable index is [`examples/real-conversations.json`](examples/real-conversations.json).
+Demonstration scenarios are listed in [`examples/scenarios.json`](examples/scenarios.json). Four conversation examples are available as Markdown transcripts: [`conversation-01-price.md`](examples/conversation-01-price.md), [`conversation-02-policies.md`](examples/conversation-02-policies.md), [`conversation-03-out-of-scope.md`](examples/conversation-03-out-of-scope.md), and [`conversation-04-store-information.md`](examples/conversation-04-store-information.md). The first three are real Gemini conversations; the fourth demonstrates the deterministic store-information tool. The consolidated machine-readable index for the real conversations is [`examples/real-conversations.json`](examples/real-conversations.json).
 
 The English technical response is available as [`technical-answer.pdf`](technical-answer.pdf).
 

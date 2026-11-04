@@ -1,0 +1,7 @@
+{
+  "provider": "Deterministic store-information tool",
+  "scenario": "store-information",
+  "user": "What is the store address, phone number, email, and opening hours?",
+  "tools": ["get_store_information"],
+  "assistant": "The store is located at Rua 14 de Maio, 3200 - Centro, Campo Grande - MS, CEP 79202-333.\n\nPhone: (67) 3341-4444\nEmail: contato@emporiodamusica.com.br\n\nOpening hours:\n- Monday to Friday: 9:00 AM to 6:00 PM\n- Saturday: 9:00 AM to 1:00 PM\n- Sunday: Closed"
+}
