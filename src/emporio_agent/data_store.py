@@ -36,7 +36,7 @@ def _int(value: str, field: str, source: str, row: int, audits: list[DataAudit])
     try:
         return int(value)
     except ValueError:
-        audits.append(DataAudit(source, row, field, f"Valor inteiro inválido: {value}"))
+        audits.append(DataAudit(source, row, field, f"Invalid integer value: {value}"))
         return 0
 
 
@@ -44,7 +44,7 @@ def _decimal(value: str, field: str, source: str, row: int, audits: list[DataAud
     try:
         return Decimal(value)
     except InvalidOperation:
-        audits.append(DataAudit(source, row, field, f"Valor decimal inválido: {value}"))
+        audits.append(DataAudit(source, row, field, f"Invalid decimal value: {value}"))
         return Decimal("0")
 
 
@@ -68,7 +68,7 @@ def load_data(data_directory: str | Path) -> DataStore:
             specs = json.loads(item["specs"] or "{}")
         except json.JSONDecodeError:
             specs = {}
-            audits.append(DataAudit(FILES["products"], row_number, "specs", "JSON inválido"))
+            audits.append(DataAudit(FILES["products"], row_number, "specs", "Invalid JSON"))
         status = item["status"]
         if status not in {"active", "coming_soon", "discontinued"}:
             audits.append(DataAudit(FILES["products"], row_number, "status", f"Status desconhecido: {status}"))

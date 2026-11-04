@@ -9,7 +9,7 @@ from .memory import SessionMemory
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Tom, agente do Empório da Música")
+    parser = argparse.ArgumentParser(description="Tom, Empório da Música customer-support agent")
     parser.add_argument("--data", default="Desafio Técnico AI Engineer 2026/data")
     parser.add_argument("--session", default="default")
     parser.add_argument("--memory-dir", default=".sessions")
@@ -17,13 +17,13 @@ def main() -> None:
     args = parser.parse_args()
     memory_path = Path(args.memory_dir) / f"{args.session}.json"
     agent = Agent(client_from_environment(), load_data(args.data), SessionMemory.load(memory_path), args.session, args.debug)
-    print("Tom: Oi! Como posso ajudar com música hoje? (digite 'sair' para encerrar)")
+    print("Tom: Hi! How can I help with music today? (type 'exit' to quit)")
     while True:
         try:
-            message = input("Você: ").strip()
+            message = input("You: ").strip()
         except EOFError:
             break
-        if message.casefold() in {"sair", "exit", "quit"}:
+        if message.casefold() in {"exit", "quit"}:
             break
         if not message:
             continue

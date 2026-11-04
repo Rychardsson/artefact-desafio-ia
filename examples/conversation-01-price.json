@@ -2,7 +2,7 @@
   "provider": "Gemini via OpenAI-compatible API",
   "model": "gemini-2.5-flash",
   "scenario": "price-and-payment",
-  "user": "Quanto custa o Takamine GD20 e quais são as condições no PIX e parcelado para Campo Grande?",
-  "tools": ["buscar_produtos", "calcular_condicoes"],
-  "assistant": "O Takamine GD20 custa R$ 2199,00.\n\nPara Campo Grande, as condições são:\n- PIX: R$ 2089,05 (com 5% de desconto)\n- Parcelado: 10x de R$ 219,90 sem juros\n- Frete: grátis via Motoboy próprio (prazo de 1 a 3 dias úteis)"
+  "user": "How much is the Takamine GD20, and what are the PIX and installment conditions for Campo Grande?",
+  "tools": ["search_products", "calculate_purchase_conditions"],
+  "assistant": "The Takamine GD20 costs R$ 2,199.00.\n\nFor Campo Grande, the conditions are:\n- PIX: R$ 2,089.05, with a 5% discount\n- Installments: 10 payments of R$ 219.90 interest-free\n- Shipping: free through the store courier, within 1 to 3 business days"
 }

@@ -68,7 +68,7 @@ class OpenAICompatibleClient:
             headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
             method="POST",
         )
-        body = _request_json(request, "OpenAI-compatível")
+        body = _request_json(request, "OpenAI-compatible")
         choice = body["choices"][0]["message"]
         calls = [
             ToolCall(call["id"], call["function"]["name"], json.loads(call["function"]["arguments"]))

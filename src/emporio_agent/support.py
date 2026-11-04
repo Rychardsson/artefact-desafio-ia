@@ -18,13 +18,13 @@ from .models import (
 STORE_ZONE = ZoneInfo("America/Campo_Grande")
 
 POLICIES = [
-    PolicySection("1", "Atendimento", "Atendimento acolhedor e claro, com informações confirmadas antes de prometer preço, estoque ou prazo."),
-    PolicySection("3", "Formas de pagamento", "PIX à vista tem 5% de desconto sobre o preço de tabela. Cartão de crédito em até 12x sem juros. De 1x a 3x, a parcela mínima é R$ 50,00; de 4x a 6x, R$ 80,00; de 7x a 12x, R$ 100,00."),
-    PolicySection("4", "Trocas e devoluções", "Arrependimento: 7 dias corridos após o recebimento. Defeito: troca na loja em até 30 dias e garantia legal de 90 dias. A troca por preferência depende da disponibilidade."),
-    PolicySection("5", "Frete e entregas", "Na região metropolitana de Campo Grande, o frete custa R$ 35,00 para pedidos até R$ 500,00 e é grátis acima de R$ 500,00. O prazo é de 1 a 3 dias úteis. Para outras cidades, há PAC, SEDEX e Jadlog; o valor depende do CEP, peso e dimensões. Instrumentos grandes podem exigir cotação especial."),
-    PolicySection("6", "Promoções e descontos", "Promoções dependem da vigência indicada no catálogo e não são cumulativas. O preço promocional e o preço original devem ser informados com transparência."),
-    PolicySection("7", "Privacidade", "A confirmação de dados do pedido exige identificação do cliente. Informações de pedidos não são reveladas a terceiros."),
-    PolicySection("8", "Garantia", "A garantia legal para produtos duráveis é de 90 dias, sem prejuízo das regras específicas de troca por defeito."),
+    PolicySection("1", "Customer service", "Friendly and clear service, with confirmed information before promising prices, stock, or delivery times."),
+    PolicySection("3", "Payment methods", "PIX paid upfront receives a 5% discount from the list price. Credit cards support up to 12 interest-free installments. From 1 to 3 installments, the minimum installment is R$ 50.00; from 4 to 6, R$ 80.00; from 7 to 12, R$ 100.00."),
+    PolicySection("4", "Returns and exchanges", "Change of mind: 7 calendar days after receipt. Defect: in-store exchange within 30 days and a 90-day legal warranty. Preference exchanges depend on availability."),
+    PolicySection("5", "Shipping and delivery", "In metropolitan Campo Grande, shipping costs R$ 35.00 for orders up to R$ 500.00 and is free above R$ 500.00. Delivery takes 1 to 3 business days. Other cities can use PAC, SEDEX, or Jadlog; price depends on ZIP code, weight, and dimensions. Large instruments may require a special quote."),
+    PolicySection("6", "Promotions and discounts", "Promotions depend on the catalog status and do not stack. The original and promotional prices must be disclosed clearly."),
+    PolicySection("7", "Privacy", "Order-data confirmation requires customer identification. Order information is not disclosed to third parties."),
+    PolicySection("8", "Warranty", "Durable products have a 90-day legal warranty, without affecting the specific defect-exchange rules."),
 ]
 
 
@@ -42,7 +42,7 @@ def _now() -> datetime:
     try:
         parsed = datetime.fromisoformat(configured)
     except ValueError as error:
-        raise ValueError("EMPORIO_NOW deve estar em formato ISO-8601.") from error
+        raise ValueError("EMPORIO_NOW must use ISO-8601 format.") from error
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=STORE_ZONE)
     return parsed.astimezone(STORE_ZONE)
@@ -103,37 +103,37 @@ class ReturnsService:
         reference_date = today or _now().date()
         order = self._orders.consult(session_id, order_id, phone, email, reference_date)
         if order is None:
-            return ReturnAssessment(False, "Não foi possível confirmar os dados do pedido.", None, [])
+            return ReturnAssessment(False, "The order details could not be validated.", None, [])
         if not order.estimated_delivery:
-            return ReturnAssessment(False, "O pedido não tem data de recebimento disponível para calcular a janela.", None, ["Podemos encaminhar o caso para a equipe."])
+            return ReturnAssessment(False, "The order has no receipt date available to calculate the window.", None, ["We can refer this case to the support team."])
         received = date.fromisoformat(order.estimated_delivery)
         days = (reference_date - received).days
         reason_key = _normalize(reason)
         if "arrepend" in reason_key or "prefer" in reason_key:
             eligible = 0 <= days <= 7
-            return ReturnAssessment(eligible, "A janela de 7 dias corridos está aberta." if eligible else "A janela de 7 dias corridos já passou.", (received + timedelta(days=7)).isoformat(), ["Avaliar defeito e garantia legal com a equipe."] if not eligible else [])
+            return ReturnAssessment(eligible, "The seven-day window is open." if eligible else "The seven-day window has expired.", (received + timedelta(days=7)).isoformat(), ["Assess the defect and legal warranty with the support team."] if not eligible else [])
         if "defeit" in reason_key:
             eligible = 0 <= days <= 90
-            return ReturnAssessment(eligible, "O produto está dentro da garantia legal de 90 dias." if eligible else "A garantia legal de 90 dias já passou.", (received + timedelta(days=90)).isoformat(), [])
-        return ReturnAssessment(False, "Preciso entender se o caso é arrependimento, preferência ou defeito.", None, [])
+            return ReturnAssessment(eligible, "The product is within the 90-day legal warranty." if eligible else "The 90-day legal warranty has expired.", (received + timedelta(days=90)).isoformat(), [])
+        return ReturnAssessment(False, "I need to know whether this is a change of mind, preference, or defect.", None, [])
 
 
 class StoreHoursService:
     def status(self, now: datetime | None = None) -> StoreHours:
         current = (now or _now()).astimezone(STORE_ZONE)
         if current.weekday() < 5:
-            opening, closing, label = time(9), time(18), "segunda a sexta, das 9h às 18h"
+            opening, closing, label = time(9), time(18), "Monday to Friday, 9 AM to 6 PM"
         elif current.weekday() == 5:
-            opening, closing, label = time(9), time(13), "sábado, das 9h às 13h"
+            opening, closing, label = time(9), time(13), "Saturday, 9 AM to 1 PM"
         else:
             opening = closing = None
-            label = "domingo, fechado"
+            label = "Sunday, closed"
         if opening and opening <= current.time() < closing:
             return StoreHours(True, label, None)
         next_day = current.date() + timedelta(days=1)
         while next_day.weekday() >= 6:
             next_day += timedelta(days=1)
-        return StoreHours(False, label, f"{next_day.isoformat()} às 9h")
+        return StoreHours(False, label, f"{next_day.isoformat()} at 9 AM")
 
 
 class StoreInformationService:
@@ -151,6 +151,6 @@ class StoreInformationService:
 
 def register_handoff(summary: str) -> HumanHandoff:
     if not summary.strip():
-        raise ValueError("O resumo do atendimento não pode ficar vazio.")
+        raise ValueError("The handoff summary cannot be empty.")
     protocol = f"EM-{token_hex(4).upper()}"
-    return HumanHandoff(protocol, summary.strip(), "A equipe deve retornar em até 24 horas úteis.")
+    return HumanHandoff(protocol, summary.strip(), "The support team should respond within 24 business hours.")

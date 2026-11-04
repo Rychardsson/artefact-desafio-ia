@@ -1,32 +1,32 @@
 [
   {
     "name": "catalog",
-    "message": "Quais violões disponíveis até R$ 1000?",
+    "message": "Which guitars are available for up to R$ 1,000?",
     "expected": "Only active products with positive stock, with prices retrieved from the catalog."
   },
   {
     "name": "general-information",
-    "message": "Qual o endereço e que horas vocês abrem?",
+    "message": "What is the store address and when do you open?",
     "expected": "Store address and opening hours confirmed by the store-information tool."
   },
   {
     "name": "price",
-    "message": "Quanto custa o Takamine GD20?",
+    "message": "How much is the Takamine GD20?",
     "expected": "R$ 2,199.00, no active promotion, with PIX and installment options."
   },
   {
     "name": "return",
-    "message": "Me arrependi, posso devolver?",
+    "message": "I changed my mind. Can I return my purchase?",
     "expected": "Request the order number and phone/email, validate identity, and calculate the seven-day window."
   },
   {
     "name": "out-of-scope",
-    "message": "Tem corda de violão? E quem ganhou o jogo ontem?",
+    "message": "Do you have guitar strings? And who won the game yesterday?",
     "expected": "Handle only the store-related question and politely refuse the sports question without inventing a partner."
   },
   {
     "name": "overdue-order",
-    "message": "Meu pedido 8 está atrasado.",
+    "message": "My order 8 is overdue.",
     "expected": "Request identity validation, report the delay after authentication, and offer human handoff."
   }
 ]

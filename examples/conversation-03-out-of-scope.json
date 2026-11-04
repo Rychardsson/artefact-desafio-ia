@@ -2,7 +2,7 @@
   "provider": "Gemini via OpenAI-compatible API",
   "model": "gemini-2.5-flash",
   "scenario": "out-of-scope",
-  "user": "Tem corda de violão? E quem ganhou o jogo ontem?",
-  "tools": ["buscar_produtos"],
-  "assistant": "Desculpe, não consegui confirmar a disponibilidade exata das cordas de violão no momento.\n\nSe tiver mais alguma dúvida sobre nossos produtos musicais, é só perguntar!"
+  "user": "Do you have guitar strings? And who won the game yesterday?",
+  "tools": ["search_products"],
+  "assistant": "Sorry, I could not confirm the exact availability of guitar strings.\n\nFeel free to ask about our music products."
 }

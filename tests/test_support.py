@@ -21,7 +21,7 @@ ZONE = ZoneInfo("America/Campo_Grande")
 
 
 def test_policy_search_finds_defect_section():
-    sections = PolicyService().search("troca por defeito")
+    sections = PolicyService().search("defect exchange")
     assert sections
     assert sections[0].number == "4"
 
@@ -63,9 +63,9 @@ def test_hours():
 
 
 def test_handoff_has_protocol_and_sla():
-    handoff = register_handoff("Pedido 8 está atrasado.")
+    handoff = register_handoff("Order 8 is overdue.")
     assert handoff.protocol.startswith("EM-")
-    assert "24 horas úteis" in handoff.expected_response
+    assert "24 business hours" in handoff.expected_response
 
 
 def test_store_information_is_explicit():
@@ -74,7 +74,7 @@ def test_store_information_is_explicit():
     assert information["hours"].is_open is True
 
 
-def test_empório_now_reproduces_approved_return_window(monkeypatch):
+def test_frozen_clock_reproduces_approved_return_window(monkeypatch):
     monkeypatch.setenv("EMPORIO_NOW", "2026-03-01T10:00:00-04:00")
     data = load_data(DATA)
     assessment = ReturnsService(OrderService(data)).assess(
@@ -87,7 +87,7 @@ def test_empório_now_reproduces_approved_return_window(monkeypatch):
     assert assessment.deadline == "2026-03-07"
 
 
-def test_invalid_empório_now_is_explicit(monkeypatch):
+def test_invalid_frozen_clock_is_explicit(monkeypatch):
     monkeypatch.setenv("EMPORIO_NOW", "not-a-date")
     with pytest.raises(ValueError, match="EMPORIO_NOW"):
         StoreHoursService().status()

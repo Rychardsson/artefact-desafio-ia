@@ -2,7 +2,7 @@
   "provider": "Gemini via OpenAI-compatible API",
   "model": "gemini-2.5-flash",
   "scenario": "policies",
-  "user": "Quais são as regras para troca por arrependimento?",
-  "tools": ["consultar_politicas"],
-  "assistant": "Para troca por arrependimento, você tem até 7 dias corridos após o recebimento do produto."
+  "user": "What are the rules for a change-of-mind return?",
+  "tools": ["search_policies"],
+  "assistant": "For a change-of-mind return, you have up to 7 calendar days after receiving the product."
 }

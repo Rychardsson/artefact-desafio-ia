@@ -16,7 +16,7 @@ def test_loads_data_and_keeps_audit():
 
 
 def test_hides_unavailable_products():
-    result = Catalog(load_data(DATA)).search(CatalogSearch(query="violões", max_price=Decimal("1000")))
+    result = Catalog(load_data(DATA)).search(CatalogSearch(query="Yamaha", max_price=Decimal("1000")))
     assert all(item.available for item in result.items)
     assert all(item.product.status == "active" for item in result.items)
 

@@ -22,37 +22,37 @@ class ScriptedClient:
 
 def test_agent_runs_tool_then_returns_answer():
     client = ScriptedClient([
-        LLMResponse("", [ToolCall("call-1", "buscar_produtos", {"query": "Ohana CK-20"})], {}),
-        LLMResponse("Encontrei o Ohana CK-20 por R$ 439,20.", [], {}),
+        LLMResponse("", [ToolCall("call-1", "search_products", {"query": "Ohana CK-20"})], {}),
+        LLMResponse("I found the Ohana CK-20 for R$ 439.20.", [], {}),
     ])
     agent = Agent(client, load_data(DATA), session_id="test")
-    answer = agent.respond("Quanto custa o Ohana CK-20?")
-    assert "439,20" in answer
+    answer = agent.respond("How much is the Ohana CK-20?")
+    assert "439.20" in answer
     assert client.calls == 2
 
 
 def test_agent_reports_tool_errors_to_model():
     client = ScriptedClient([
-        LLMResponse("", [ToolCall("call-1", "calcular_condicoes", {"product_id": 999, "city": "Campo Grande"})], {}),
-        LLMResponse("Não encontrei esse produto.", [], {}),
+        LLMResponse("", [ToolCall("call-1", "calculate_purchase_conditions", {"product_id": 999, "city": "Campo Grande"})], {}),
+        LLMResponse("I could not find that product.", [], {}),
     ])
-    answer = Agent(client, load_data(DATA), session_id="test").respond("Calcule o produto 999")
-    assert answer == "Não encontrei esse produto."
+    answer = Agent(client, load_data(DATA), session_id="test").respond("Calculate product 999")
+    assert answer == "I could not find that product."
 
 
 def test_agent_can_answer_store_information_from_tool():
     client = ScriptedClient([
-        LLMResponse("", [ToolCall("call-1", "consultar_dados_da_loja", {})], {}),
-        LLMResponse("Ficamos na Rua 14 de Maio, 3200, Centro, Campo Grande - MS.", [], {}),
+        LLMResponse("", [ToolCall("call-1", "get_store_information", {})], {}),
+        LLMResponse("We are located at Rua 14 de Maio, 3200, Centro, Campo Grande - MS.", [], {}),
     ])
-    answer = Agent(client, load_data(DATA), session_id="store-info").respond("Qual é o endereço?")
+    answer = Agent(client, load_data(DATA), session_id="store-info").respond("What is the address?")
     assert "Rua 14 de Maio, 3200" in answer
 
 
 def test_agent_enforces_round_limit():
-    call = LLMResponse("", [ToolCall("call", "verificar_horario", {})], {})
+    call = LLMResponse("", [ToolCall("call", "check_store_hours", {})], {})
     with pytest.raises(RuntimeError, match="limite de 2"):
-        Agent(ScriptedClient([call]), load_data(DATA), max_rounds=2).respond("horário")
+        Agent(ScriptedClient([call]), load_data(DATA), max_rounds=2).respond("hours")
 
 
 def test_memory_round_trip(tmp_path):

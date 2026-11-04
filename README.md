@@ -97,7 +97,9 @@ uv run --with pytest pytest
 21 passed
 ```
 
-Demonstration scenarios are listed in [`examples/scenarios.json`](examples/scenarios.json). Three real Gemini conversations are stored in [`examples/`](examples/), with a consolidated index in [`examples/real-conversations.json`](examples/real-conversations.json).
+Demonstration scenarios are listed in [`examples/scenarios.json`](examples/scenarios.json). Three real Gemini conversations are available as Markdown transcripts: [`conversation-01-price.md`](examples/conversation-01-price.md), [`conversation-02-policies.md`](examples/conversation-02-policies.md), and [`conversation-03-out-of-scope.md`](examples/conversation-03-out-of-scope.md). The consolidated machine-readable index is [`examples/real-conversations.json`](examples/real-conversations.json).
+
+The English technical response is available as [`technical-answer.pdf`](technical-answer.pdf).
 
 ## Known limitations
 

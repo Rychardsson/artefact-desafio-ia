@@ -13,7 +13,7 @@ def _money(value: Decimal) -> Decimal:
 def calculate_conditions(lines: Iterable[CartLine], city: str) -> PurchaseConditions:
     cart = list(lines)
     if not cart:
-        raise ValueError("É necessário informar ao menos um item.")
+        raise ValueError("At least one item is required.")
     if any(line.quantity < 1 for line in cart):
         raise ValueError("A quantidade de cada item deve ser positiva.")
 
@@ -39,21 +39,21 @@ def calculate_conditions(lines: Iterable[CartLine], city: str) -> PurchaseCondit
     normalized_city = city.casefold().strip()
     notes: list[str] = []
     if special:
-        notes.append("Instrumentos de grande porte podem exigir frete especial com cotação individual.")
+        notes.append("Large instruments may require a special shipping quote.")
 
     if normalized_city == "campo grande":
         shipping_price = Decimal("0") if subtotal > Decimal("500") else Decimal("35")
         shipping_options = [
-            ShippingOption("Motoboy próprio", "1 a 3 dias úteis", shipping_price)
+            ShippingOption("Store courier", "1 to 3 business days", shipping_price)
         ]
     else:
         shipping_price = None
         shipping_options = [
-            ShippingOption("PAC (Correios)", "5 a 12 dias úteis", None),
-            ShippingOption("SEDEX (Correios)", "2 a 5 dias úteis", None),
-            ShippingOption("Jadlog", "3 a 8 dias úteis", None),
+            ShippingOption("PAC (Correios)", "5 to 12 business days", None),
+            ShippingOption("SEDEX (Correios)", "2 to 5 business days", None),
+            ShippingOption("Jadlog", "3 to 8 business days", None),
         ]
-        notes.append("O valor do frete fora da região metropolitana é calculado pelo CEP, peso e dimensões.")
+        notes.append("Shipping outside the metropolitan region is calculated from ZIP code, weight, and dimensions.")
 
     return PurchaseConditions(
         subtotal=subtotal,
