@@ -11,6 +11,9 @@ dependencies = ["tzdata>=2024.1"]
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 
+[project.scripts]
+emporio-agent = "emporio_agent.cli:main"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 

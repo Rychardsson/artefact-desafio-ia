@@ -1,0 +1,93 @@
+import json
+import os
+from dataclasses import dataclass
+from typing import Any, Protocol
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+
+@dataclass(frozen=True)
+class ToolCall:
+    call_id: str
+    name: str
+    arguments: dict[str, Any]
+
+
+@dataclass(frozen=True)
+class LLMResponse:
+    text: str
+    tool_calls: list[ToolCall]
+    raw: dict[str, Any]
+
+
+class LLMClient(Protocol):
+    def complete(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> LLMResponse: ...
+
+
+class OpenAICompatibleClient:
+    def __init__(self, api_key: str, model: str, base_url: str = "https://api.openai.com/v1") -> None:
+        self.api_key = api_key
+        self.model = model
+        self.base_url = base_url.rstrip("/")
+
+    def complete(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> LLMResponse:
+        payload = {"model": self.model, "messages": messages, "tools": tools}
+        request = Request(
+            f"{self.base_url}/chat/completions",
+            data=json.dumps(payload).encode(),
+            headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urlopen(request, timeout=60) as response:
+                body = json.loads(response.read())
+        except (HTTPError, URLError, TimeoutError) as error:
+            raise RuntimeError(f"Falha no provedor OpenAI-compatível: {error}") from error
+        choice = body["choices"][0]["message"]
+        calls = [
+            ToolCall(call["id"], call["function"]["name"], json.loads(call["function"]["arguments"]))
+            for call in choice.get("tool_calls", [])
+        ]
+        return LLMResponse(choice.get("content") or "", calls, body)
+
+
+class AnthropicClient:
+    def __init__(self, api_key: str, model: str, base_url: str = "https://api.anthropic.com/v1") -> None:
+        self.api_key = api_key
+        self.model = model
+        self.base_url = base_url.rstrip("/")
+
+    def complete(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]]) -> LLMResponse:
+        system = next((message["content"] for message in messages if message["role"] == "system"), "")
+        conversation = [message for message in messages if message["role"] != "system"]
+        payload = {"model": self.model, "max_tokens": 1024, "system": system, "messages": conversation, "tools": tools}
+        request = Request(
+            f"{self.base_url}/messages",
+            data=json.dumps(payload).encode(),
+            headers={"x-api-key": self.api_key, "anthropic-version": "2023-06-01", "Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urlopen(request, timeout=60) as response:
+                body = json.loads(response.read())
+        except (HTTPError, URLError, TimeoutError) as error:
+            raise RuntimeError(f"Falha no provedor Anthropic: {error}") from error
+        text = "".join(block.get("text", "") for block in body.get("content", []) if block.get("type") == "text")
+        calls = [
+            ToolCall(block["id"], block["name"], block.get("input", {}))
+            for block in body.get("content", []) if block.get("type") == "tool_use"
+        ]
+        return LLMResponse(text, calls, body)
+
+
+def client_from_environment() -> LLMClient:
+    provider = os.getenv("EMPORIO_PROVIDER", "openai").casefold()
+    model = os.getenv("EMPORIO_MODEL", "gpt-4o-mini")
+    key = os.getenv("EMPORIO_API_KEY") or os.getenv("OPENAI_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
+    if not key:
+        raise RuntimeError("Defina EMPORIO_API_KEY, OPENAI_API_KEY ou ANTHROPIC_API_KEY.")
+    if provider == "anthropic":
+        return AnthropicClient(key, model, os.getenv("EMPORIO_BASE_URL", "https://api.anthropic.com/v1"))
+    if provider in {"openai", "openai-compatible"}:
+        return OpenAICompatibleClient(key, model, os.getenv("EMPORIO_BASE_URL", "https://api.openai.com/v1"))
+    raise ValueError(f"Provedor desconhecido: {provider}")

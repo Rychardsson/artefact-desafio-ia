@@ -1,6 +1,8 @@
 from .catalog import Catalog
 from .data_store import DataStore, load_data
 from .payments import calculate_conditions
+from .agent import Agent, TOOLS
+from .memory import SessionMemory
 from .support import (
     OrderService,
     PolicyService,
@@ -43,6 +45,9 @@ __all__ = [
     "PurchaseConditions",
     "ShippingOption",
     "calculate_conditions",
+    "Agent",
+    "SessionMemory",
+    "TOOLS",
     "load_data",
     "OrderService",
     "PolicyService",
