@@ -44,7 +44,7 @@ CLI
       ├── ToolRegistry
       │    ├── catálogo e pagamentos
       │    ├── pedidos e trocas
-      │    ├── políticas, horário e handoff
+      │    ├── políticas, dados da loja, horário e handoff
       │    └── dados tipados dos CSVs
       └── SessionMemory (JSON)
 ```
@@ -67,6 +67,7 @@ O modelo interpreta a mensagem e escolhe ferramentas. Preço, estoque, desconto,
 - PIX aplica 5% somente quando os itens não estão em promoção.
 - Em Campo Grande, frete é grátis somente acima de R$ 500,00; até R$ 500,00 custa R$ 35,00.
 - Consulta de pedido exige número e telefone, ou e-mail quando único. Após três falhas na sessão, a consulta é bloqueada.
+- Endereço, telefone, e-mail e horário são retornados pela ferramenta de dados da loja.
 - A data de entrega é usada como proxy da data de recebimento porque os CSVs não têm data efetiva de recebimento.
 
 As inconsistências são auditadas em memória por `DataStore.audits`; não são corrigidas silenciosamente.

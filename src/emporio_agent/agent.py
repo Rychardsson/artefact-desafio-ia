@@ -10,7 +10,7 @@ from .llm import LLMClient, LLMResponse
 from .memory import SessionMemory
 from .models import CartLine, CatalogSearch
 from .payments import calculate_conditions
-from .support import OrderService, PolicyService, ReturnsService, StoreHoursService, register_handoff
+from .support import OrderService, PolicyService, ReturnsService, StoreHoursService, StoreInformationService, register_handoff
 
 SYSTEM_PROMPT = """Você é Tom, atendente acolhedor do Empório da Música.
 Responda em português brasileiro, de forma curta e clara.
@@ -45,6 +45,7 @@ TOOLS = [
     _tool("avaliar_troca_devolucao", "Avalia elegibilidade de troca ou devolução.", {"order_id": {"type": "integer"}, "reason": {"type": "string"}, "phone": {"type": "string"}, "email": {"type": "string"}}, ["order_id", "reason"]),
     _tool("consultar_politicas", "Consulta políticas relevantes da loja.", {"query": {"type": "string"}}, ["query"]),
     _tool("verificar_horario", "Verifica se a loja está aberta agora.", {}, []),
+    _tool("consultar_dados_da_loja", "Consulta endereço, telefone, e-mail e horário da loja.", {}, []),
     _tool("registrar_atendimento_humano", "Registra um caso que precisa da equipe.", {"summary": {"type": "string"}}, ["summary"]),
 ]
 
@@ -56,6 +57,7 @@ class ToolRegistry:
         self.returns = ReturnsService(self.orders)
         self.policies = PolicyService()
         self.hours = StoreHoursService()
+        self.store_info = StoreInformationService()
         self.session_id = session_id
         self._data = data
 
@@ -79,6 +81,8 @@ class ToolRegistry:
             result = self.policies.search(arguments["query"])
         elif name == "verificar_horario":
             result = self.hours.status()
+        elif name == "consultar_dados_da_loja":
+            result = self.store_info.get()
         elif name == "registrar_atendimento_humano":
             result = register_handoff(arguments["summary"])
         else:

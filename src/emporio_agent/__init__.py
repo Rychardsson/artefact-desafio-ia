@@ -8,6 +8,7 @@ from .support import (
     PolicyService,
     ReturnsService,
     StoreHoursService,
+    StoreInformationService,
     register_handoff,
 )
 from .models import (
@@ -53,5 +54,6 @@ __all__ = [
     "PolicyService",
     "ReturnsService",
     "StoreHoursService",
+    "StoreInformationService",
     "register_handoff",
 ]

@@ -8,6 +8,7 @@ from emporio_agent import (
     PolicyService,
     ReturnsService,
     StoreHoursService,
+    StoreInformationService,
     load_data,
     register_handoff,
 )
@@ -63,3 +64,9 @@ def test_handoff_has_protocol_and_sla():
     handoff = register_handoff("Pedido 8 está atrasado.")
     assert handoff.protocol.startswith("EM-")
     assert "24 horas úteis" in handoff.expected_response
+
+
+def test_store_information_is_explicit():
+    information = StoreInformationService().get(datetime(2026, 11, 4, 10, 0, tzinfo=ZONE))
+    assert information["address"] == "Rua 14 de Maio, 3200 - Centro, Campo Grande - MS, CEP 79202-333"
+    assert information["hours"].is_open is True

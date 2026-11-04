@@ -122,6 +122,19 @@ class StoreHoursService:
         return StoreHours(False, label, f"{next_day.isoformat()} às 9h")
 
 
+class StoreInformationService:
+    def __init__(self) -> None:
+        self._hours = StoreHoursService()
+
+    def get(self, now: datetime | None = None) -> dict[str, object]:
+        return {
+            "address": "Rua 14 de Maio, 3200 - Centro, Campo Grande - MS, CEP 79202-333",
+            "phone": "(67) 3341-4444",
+            "email": "contato@emporiodamusica.com.br",
+            "hours": self._hours.status(now),
+        }
+
+
 def register_handoff(summary: str) -> HumanHandoff:
     if not summary.strip():
         raise ValueError("O resumo do atendimento não pode ficar vazio.")

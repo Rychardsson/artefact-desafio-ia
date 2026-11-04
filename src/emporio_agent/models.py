@@ -164,6 +164,14 @@ class StoreHours:
 
 
 @dataclass(frozen=True)
+class StoreInformation:
+    address: str
+    phone: str
+    email: str
+    hours: StoreHours
+
+
+@dataclass(frozen=True)
 class PolicySection:
     number: str
     title: str
