@@ -13,6 +13,15 @@ Copy-Item .env.example .env
 uv run emporio-agent
 ```
 
+Equivalent bash commands:
+
+```bash
+uv sync --extra dev
+cp .env.example .env
+# set EMPORIO_API_KEY in the environment or in .env
+uv run emporio-agent
+```
+
 The CLI accepts:
 
 ```text
@@ -29,6 +38,8 @@ $env:EMPORIO_API_KEY = "your-key"
 uv run emporio-agent --debug
 ```
 
+The default example configuration uses Gemini 2.5 Flash through Google's OpenAI-compatible endpoint. It was chosen because it supports tool calling, is fast enough for a support flow, and is available for this challenge with a straightforward environment-based setup. The prompt keeps the model focused on language matching, store scope, privacy, and deterministic tool use; Python remains responsible for prices, stock, policies, authentication, and deadlines.
+
 To validate without an external provider:
 
 ```powershell
@@ -39,14 +50,14 @@ uv run --with pytest pytest
 
 ```text
 CLI
- └── Agent (maximum of 6 rounds)
-      ├── LLMClient: Anthropic or OpenAI-compatible
-      ├── ToolRegistry
-      │    ├── catalog and payments
-      │    ├── orders and returns
-      │    ├── policies, store information, hours, and handoff
-      │    └── typed CSV data
-      └── SessionMemory (JSON)
+|-- Agent (maximum of 6 rounds)
+     |-- LLMClient: Anthropic or OpenAI-compatible
+     |-- ToolRegistry
+     |    |-- catalog and payments
+     |    |-- orders and returns
+     |    |-- policies, store information, hours, and handoff
+     |    `-- typed CSV data
+     `-- SessionMemory (JSON)
 ```
 
 The model interprets the user message and selects tools. Prices, stock, discounts, installments, shipping, authentication, and deadlines are calculated in Python.
@@ -109,6 +120,13 @@ The English technical response is available as [`technical-answer.pdf`](technica
 - Handoff records exist only during the local process.
 - Final response quality still depends on the configured model.
 
+## With more time
+
+- Replace lexical policy retrieval with embeddings and evaluate retrieval quality.
+- Add real shipping quotes by ZIP code, weight, and dimensions.
+- Integrate human handoff with a support dashboard or messaging provider.
+- Add an automated evaluation set for factuality, tool selection, language matching, and refusal behavior.
+
 ## Use of AI assistants
 
-AI assistants were used to accelerate data inspection, propose the initial module separation, and review test cases. The implementation, business rules, data decisions, and test execution were reviewed in the repository. No key or external private data was included in the codebase.
+I used GitHub Copilot with the Copilot SDK in VS Code as an implementation assistant. My workflow was to inspect the supplied PDFs and CSVs, ask the assistant to propose small implementation steps, implement and review each module, run focused tests, inspect failures, and then run the full suite. Gemini 2.5 Flash was used through the project's OpenAI-compatible adapter for the recorded customer conversations; deterministic Python tools remained the source of truth for business rules. No API key or external private data was included in the codebase.

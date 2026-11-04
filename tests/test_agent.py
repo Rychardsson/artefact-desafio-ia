@@ -51,7 +51,7 @@ def test_agent_can_answer_store_information_from_tool():
 
 def test_agent_enforces_round_limit():
     call = LLMResponse("", [ToolCall("call", "check_store_hours", {})], {})
-    with pytest.raises(RuntimeError, match="limite de 2"):
+    with pytest.raises(RuntimeError, match="limit of 2"):
         Agent(ScriptedClient([call]), load_data(DATA), max_rounds=2).respond("hours")
 
 

@@ -9,4 +9,4 @@
 
 **Assistant:**
 
-For a change-of-mind return, you have up to 7 calendar days after receiving the product.
+For a change-of-mind return, the product must be unused and in its original packaging. You are eligible within 7 calendar days of receiving the product. The store covers the return shipping costs for these cases, and refunds are processed within 10 business days.

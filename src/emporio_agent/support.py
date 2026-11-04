@@ -20,7 +20,7 @@ STORE_ZONE = ZoneInfo("America/Campo_Grande")
 POLICIES = [
     PolicySection("1", "Customer service", "Friendly and clear service, with confirmed information before promising prices, stock, or delivery times."),
     PolicySection("3", "Payment methods", "PIX paid upfront receives a 5% discount from the list price. Credit cards support up to 12 interest-free installments. From 1 to 3 installments, the minimum installment is R$ 50.00; from 4 to 6, R$ 80.00; from 7 to 12, R$ 100.00."),
-    PolicySection("4", "Returns and exchanges", "Change of mind: 7 calendar days after receipt. Defect: in-store exchange within 30 days and a 90-day legal warranty. Preference exchanges depend on availability."),
+    PolicySection("4", "Returns and exchanges", "Change of mind: 7 calendar days after receipt, provided the product is unused and in its original packaging. The store covers return shipping for change-of-mind cases, and refunds are processed within 10 business days. Defect: in-store exchange within 30 days and a 90-day legal warranty. Preference exchanges depend on availability."),
     PolicySection("5", "Shipping and delivery", "In metropolitan Campo Grande, shipping costs R$ 35.00 for orders up to R$ 500.00 and is free above R$ 500.00. Delivery takes 1 to 3 business days. Other cities can use PAC, SEDEX, or Jadlog; price depends on ZIP code, weight, and dimensions. Large instruments may require a special quote."),
     PolicySection("6", "Promotions and discounts", "Promotions depend on the catalog status and do not stack. The original and promotional prices must be disclosed clearly."),
     PolicySection("7", "Privacy", "Order-data confirmation requires customer identification. Order information is not disclosed to third parties."),
