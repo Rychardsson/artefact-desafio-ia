@@ -1,7 +1,17 @@
 from decimal import Decimal, ROUND_HALF_UP
+import re
+import unicodedata
 
 from .data_store import DataStore
 from .models import CatalogItem, CatalogResult, CatalogSearch
+
+
+def _tokens(value: str) -> set[str]:
+    normalized = "".join(
+        character for character in unicodedata.normalize("NFD", value.casefold())
+        if unicodedata.category(character) != "Mn"
+    )
+    return {re.sub(r"s$", "", token) for token in re.findall(r"\w+", normalized)}
 
 
 class Catalog:
@@ -27,7 +37,11 @@ class Catalog:
         items = [item for product in self._data.products if (item := self._item(product.product_id)) is not None]
         query = criteria.query.casefold().strip() if criteria.query else None
         if query:
-            items = [item for item in items if query in f"{item.product.name} {item.category.name if item.category else ''}".casefold()]
+            query_tokens = _tokens(query)
+            items = [
+                item for item in items
+                if query_tokens <= _tokens(f"{item.product.name} {item.category.name if item.category else ''}")
+            ]
         if criteria.category_id is not None:
             items = [item for item in items if item.product.category_id == criteria.category_id]
         if criteria.max_price is not None:
