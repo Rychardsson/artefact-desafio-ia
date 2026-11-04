@@ -40,6 +40,15 @@ def test_agent_reports_tool_errors_to_model():
     assert answer == "Não encontrei esse produto."
 
 
+def test_agent_can_answer_store_information_from_tool():
+    client = ScriptedClient([
+        LLMResponse("", [ToolCall("call-1", "consultar_dados_da_loja", {})], {}),
+        LLMResponse("Ficamos na Rua 14 de Maio, 3200, Centro, Campo Grande - MS.", [], {}),
+    ])
+    answer = Agent(client, load_data(DATA), session_id="store-info").respond("Qual é o endereço?")
+    assert "Rua 14 de Maio, 3200" in answer
+
+
 def test_agent_enforces_round_limit():
     call = LLMResponse("", [ToolCall("call", "verificar_horario", {})], {})
     with pytest.raises(RuntimeError, match="limite de 2"):

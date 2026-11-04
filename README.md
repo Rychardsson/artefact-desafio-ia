@@ -73,6 +73,14 @@ O modelo interpreta a mensagem e escolhe ferramentas. Preço, estoque, desconto,
 
 As inconsistências são auditadas em memória por `DataStore.audits`; não são corrigidas silenciosamente.
 
+### Contradições conhecidas
+
+- O manual apresenta dois telefones; o fluxo usa o telefone principal da capa, `(67) 3341-4444`, e não inventa um WhatsApp.
+- O manual apresenta variações de e-mail; o fluxo usa `contato@emporiodamusica.com.br`.
+- A regra geral menciona parcela mínima de R$ 100,00, mas a seção específica por faixa prevalece: R$ 50,00 até 3x, R$ 80,00 de 4x a 6x e R$ 100,00 de 7x a 12x.
+- O manual traz troca por defeito em 30 dias e garantia legal de 90 dias; o agente explica as duas camadas.
+- O manual menciona mais de 300 instrumentos, enquanto o CSV contém 65 produtos; o catálogo consultável é sempre o CSV.
+
 ## Privacidade e segurança
 
 - Dados do pedido só são retornados depois da validação.
@@ -86,10 +94,10 @@ Os testes unitários cobrem catálogo, promoções, pagamentos, frete, autentica
 
 ```text
 uv run --with pytest pytest
-20 passed
+21 passed
 ```
 
-Os cenários de demonstração estão em [`examples/scenarios.json`](examples/scenarios.json). Uma conversa real executada com Gemini está em [`examples/conversation-real-gemini.json`](examples/conversation-real-gemini.json).
+Os cenários de demonstração estão em [`examples/scenarios.json`](examples/scenarios.json). Três conversas reais executadas com Gemini estão em [`examples/real-conversations.json`](examples/real-conversations.json).
 
 ## Limitações conhecidas
 
