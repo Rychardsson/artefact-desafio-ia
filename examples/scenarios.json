@@ -1,0 +1,32 @@
+[
+  {
+    "name": "catalogo",
+    "message": "Quais violões disponíveis até R$ 1000?",
+    "expected": "Somente produtos ativos com estoque positivo, com preço consultado no catálogo."
+  },
+  {
+    "name": "informacao-geral",
+    "message": "Qual o endereço e que horas vocês abrem?",
+    "expected": "Endereço da loja e horário confirmado pela ferramenta de horário."
+  },
+  {
+    "name": "preco",
+    "message": "Quanto custa o Takamine GD20?",
+    "expected": "R$ 2.199,00, sem promoção ativa, com PIX e opções de parcelamento."
+  },
+  {
+    "name": "troca",
+    "message": "Me arrependi, posso devolver?",
+    "expected": "Solicitar número do pedido e telefone/e-mail, validar e calcular a janela de 7 dias."
+  },
+  {
+    "name": "fora-do-escopo",
+    "message": "Tem corda de violão? E quem ganhou o jogo ontem?",
+    "expected": "Atender apenas o assunto da loja e recusar o assunto esportivo sem inventar parceiro."
+  },
+  {
+    "name": "pedido-atrasado",
+    "message": "Meu pedido 8 está atrasado.",
+    "expected": "Solicitar validação, informar atraso quando autenticado e oferecer encaminhamento humano."
+  }
+]
