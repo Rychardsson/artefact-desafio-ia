@@ -1,0 +1,11 @@
+pyproject.toml
+src/emporio_agent/__init__.py
+src/emporio_agent/catalog.py
+src/emporio_agent/data_store.py
+src/emporio_agent/models.py
+src/emporio_da_musica_agent.egg-info/PKG-INFO
+src/emporio_da_musica_agent.egg-info/SOURCES.txt
+src/emporio_da_musica_agent.egg-info/dependency_links.txt
+src/emporio_da_musica_agent.egg-info/requires.txt
+src/emporio_da_musica_agent.egg-info/top_level.txt
+tests/test_catalog.py
