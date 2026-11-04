@@ -1,32 +1,32 @@
 [
   {
-    "name": "catalogo",
+    "name": "catalog",
     "message": "Quais violões disponíveis até R$ 1000?",
-    "expected": "Somente produtos ativos com estoque positivo, com preço consultado no catálogo."
+    "expected": "Only active products with positive stock, with prices retrieved from the catalog."
   },
   {
-    "name": "informacao-geral",
+    "name": "general-information",
     "message": "Qual o endereço e que horas vocês abrem?",
-    "expected": "Endereço da loja e horário confirmado pela ferramenta de horário."
+    "expected": "Store address and opening hours confirmed by the store-information tool."
   },
   {
-    "name": "preco",
+    "name": "price",
     "message": "Quanto custa o Takamine GD20?",
-    "expected": "R$ 2.199,00, sem promoção ativa, com PIX e opções de parcelamento."
+    "expected": "R$ 2,199.00, no active promotion, with PIX and installment options."
   },
   {
-    "name": "troca",
+    "name": "return",
     "message": "Me arrependi, posso devolver?",
-    "expected": "Solicitar número do pedido e telefone/e-mail, validar e calcular a janela de 7 dias."
+    "expected": "Request the order number and phone/email, validate identity, and calculate the seven-day window."
   },
   {
-    "name": "fora-do-escopo",
+    "name": "out-of-scope",
     "message": "Tem corda de violão? E quem ganhou o jogo ontem?",
-    "expected": "Atender apenas o assunto da loja e recusar o assunto esportivo sem inventar parceiro."
+    "expected": "Handle only the store-related question and politely refuse the sports question without inventing a partner."
   },
   {
-    "name": "pedido-atrasado",
+    "name": "overdue-order",
     "message": "Meu pedido 8 está atrasado.",
-    "expected": "Solicitar validação, informar atraso quando autenticado e oferecer encaminhamento humano."
+    "expected": "Request identity validation, report the delay after authentication, and offer human handoff."
   }
 ]
