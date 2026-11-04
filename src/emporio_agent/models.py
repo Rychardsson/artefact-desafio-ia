@@ -97,3 +97,34 @@ class CatalogResult:
     items: list[CatalogItem]
     hidden_unavailable: int
     alternatives: list[CatalogItem]
+
+
+@dataclass(frozen=True)
+class CartLine:
+    item: CatalogItem
+    quantity: int = 1
+
+
+@dataclass(frozen=True)
+class InstallmentOption:
+    count: int
+    amount: Decimal
+
+
+@dataclass(frozen=True)
+class ShippingOption:
+    method: str
+    estimated_days: str
+    price: Decimal | None
+    tracking_and_insurance: bool = True
+
+
+@dataclass(frozen=True)
+class PurchaseConditions:
+    subtotal: Decimal
+    pix_total: Decimal | None
+    installments: list[InstallmentOption]
+    shipping_price: Decimal | None
+    shipping_options: list[ShippingOption]
+    special_freight_quote: bool
+    notes: list[str]
