@@ -1,6 +1,13 @@
 from .catalog import Catalog
 from .data_store import DataStore, load_data
 from .payments import calculate_conditions
+from .support import (
+    OrderService,
+    PolicyService,
+    ReturnsService,
+    StoreHoursService,
+    register_handoff,
+)
 from .models import (
     CartLine,
     CatalogItem,
@@ -37,4 +44,9 @@ __all__ = [
     "ShippingOption",
     "calculate_conditions",
     "load_data",
+    "OrderService",
+    "PolicyService",
+    "ReturnsService",
+    "StoreHoursService",
+    "register_handoff",
 ]

@@ -128,3 +128,50 @@ class PurchaseConditions:
     shipping_options: list[ShippingOption]
     special_freight_quote: bool
     notes: list[str]
+
+
+@dataclass(frozen=True)
+class OrderItemView:
+    product_id: int
+    name: str
+    quantity: int
+
+
+@dataclass(frozen=True)
+class OrderView:
+    order_id: int
+    status: str
+    total: Decimal
+    items: list[OrderItemView]
+    tracking_code: str | None
+    estimated_delivery: str | None
+    delivery_overdue: bool
+
+
+@dataclass(frozen=True)
+class ReturnAssessment:
+    eligible: bool
+    reason: str
+    deadline: str | None
+    alternatives: list[str]
+
+
+@dataclass(frozen=True)
+class StoreHours:
+    is_open: bool
+    current_period: str
+    next_opening: str | None
+
+
+@dataclass(frozen=True)
+class PolicySection:
+    number: str
+    title: str
+    content: str
+
+
+@dataclass(frozen=True)
+class HumanHandoff:
+    protocol: str
+    message: str
+    expected_response: str
