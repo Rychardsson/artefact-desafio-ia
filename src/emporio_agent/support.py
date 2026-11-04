@@ -1,4 +1,5 @@
 import re
+import os
 import unicodedata
 from datetime import date, datetime, time, timedelta
 from secrets import token_hex
@@ -32,6 +33,19 @@ def _normalize(value: str) -> str:
         character for character in unicodedata.normalize("NFD", value.casefold())
         if unicodedata.category(character) != "Mn"
     )
+
+
+def _now() -> datetime:
+    configured = os.getenv("EMPORIO_NOW")
+    if not configured:
+        return datetime.now(STORE_ZONE)
+    try:
+        parsed = datetime.fromisoformat(configured)
+    except ValueError as error:
+        raise ValueError("EMPORIO_NOW deve estar em formato ISO-8601.") from error
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=STORE_ZONE)
+    return parsed.astimezone(STORE_ZONE)
 
 
 class PolicyService:
@@ -75,7 +89,7 @@ class OrderService:
             OrderItemView(item.product_id, next((product.name for product in self._data.products if product.product_id == item.product_id), "Produto"), item.quantity)
             for item in self._data.order_items if item.order_id == order.order_id
         ]
-        reference_date = today or datetime.now(STORE_ZONE).date()
+        reference_date = today or _now().date()
         delivery_date = date.fromisoformat(order.estimated_delivery) if order.estimated_delivery else None
         overdue = bool(delivery_date and delivery_date < reference_date and order.status not in {"delivered", "cancelled"})
         return OrderView(order.order_id, order.status, order.total, items, order.tracking_code, order.estimated_delivery, overdue)
@@ -86,7 +100,7 @@ class ReturnsService:
         self._orders = orders
 
     def assess(self, session_id: str, order_id: int, reason: str, phone: str | None = None, email: str | None = None, today: date | None = None) -> ReturnAssessment:
-        reference_date = today or datetime.now(STORE_ZONE).date()
+        reference_date = today or _now().date()
         order = self._orders.consult(session_id, order_id, phone, email, reference_date)
         if order is None:
             return ReturnAssessment(False, "Não foi possível confirmar os dados do pedido.", None, [])
@@ -106,7 +120,7 @@ class ReturnsService:
 
 class StoreHoursService:
     def status(self, now: datetime | None = None) -> StoreHours:
-        current = (now or datetime.now(STORE_ZONE)).astimezone(STORE_ZONE)
+        current = (now or _now()).astimezone(STORE_ZONE)
         if current.weekday() < 5:
             opening, closing, label = time(9), time(18), "segunda a sexta, das 9h às 18h"
         elif current.weekday() == 5:

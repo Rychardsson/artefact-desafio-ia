@@ -69,6 +69,7 @@ O modelo interpreta a mensagem e escolhe ferramentas. Preço, estoque, desconto,
 - Consulta de pedido exige número e telefone, ou e-mail quando único. Após três falhas na sessão, a consulta é bloqueada.
 - Endereço, telefone, e-mail e horário são retornados pela ferramenta de dados da loja.
 - A data de entrega é usada como proxy da data de recebimento porque os CSVs não têm data efetiva de recebimento.
+- Para reproduzir cenários com relógio congelado, use `EMPORIO_NOW=2026-03-01T10:00:00-04:00`.
 
 As inconsistências são auditadas em memória por `DataStore.audits`; não são corrigidas silenciosamente.
 
@@ -85,7 +86,7 @@ Os testes unitários cobrem catálogo, promoções, pagamentos, frete, autentica
 
 ```text
 uv run --with pytest pytest
-17 passed
+20 passed
 ```
 
 Os cenários de demonstração estão em [`examples/scenarios.json`](examples/scenarios.json). Uma conversa real executada com Gemini está em [`examples/conversation-real-gemini.json`](examples/conversation-real-gemini.json).

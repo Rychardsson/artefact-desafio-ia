@@ -3,6 +3,8 @@ from decimal import Decimal
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import pytest
+
 from emporio_agent import (
     OrderService,
     PolicyService,
@@ -70,3 +72,22 @@ def test_store_information_is_explicit():
     information = StoreInformationService().get(datetime(2026, 11, 4, 10, 0, tzinfo=ZONE))
     assert information["address"] == "Rua 14 de Maio, 3200 - Centro, Campo Grande - MS, CEP 79202-333"
     assert information["hours"].is_open is True
+
+
+def test_empório_now_reproduces_approved_return_window(monkeypatch):
+    monkeypatch.setenv("EMPORIO_NOW", "2026-03-01T10:00:00-04:00")
+    data = load_data(DATA)
+    assessment = ReturnsService(OrderService(data)).assess(
+        "frozen-session",
+        8,
+        "arrependimento",
+        phone="67996547821",
+    )
+    assert assessment.eligible is True
+    assert assessment.deadline == "2026-03-07"
+
+
+def test_invalid_empório_now_is_explicit(monkeypatch):
+    monkeypatch.setenv("EMPORIO_NOW", "not-a-date")
+    with pytest.raises(ValueError, match="EMPORIO_NOW"):
+        StoreHoursService().status()
