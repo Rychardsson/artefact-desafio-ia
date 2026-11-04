@@ -6,6 +6,19 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
+def _load_dotenv() -> None:
+    path = os.getenv("EMPORIO_DOTENV", ".env")
+    if not os.path.isfile(path):
+        return
+    with open(path, encoding="utf-8") as file:
+        for line in file:
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#") or "=" not in stripped:
+                continue
+            name, value = stripped.split("=", 1)
+            os.environ.setdefault(name.strip(), value.strip().strip("\"'"))
+
+
 @dataclass(frozen=True)
 class ToolCall:
     call_id: str
@@ -41,7 +54,10 @@ class OpenAICompatibleClient:
         try:
             with urlopen(request, timeout=60) as response:
                 body = json.loads(response.read())
-        except (HTTPError, URLError, TimeoutError) as error:
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"Falha no provedor OpenAI-compatível ({error.code}): {detail}") from error
+        except (URLError, TimeoutError) as error:
             raise RuntimeError(f"Falha no provedor OpenAI-compatível: {error}") from error
         choice = body["choices"][0]["message"]
         calls = [
@@ -70,7 +86,10 @@ class AnthropicClient:
         try:
             with urlopen(request, timeout=60) as response:
                 body = json.loads(response.read())
-        except (HTTPError, URLError, TimeoutError) as error:
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"Falha no provedor Anthropic ({error.code}): {detail}") from error
+        except (URLError, TimeoutError) as error:
             raise RuntimeError(f"Falha no provedor Anthropic: {error}") from error
         text = "".join(block.get("text", "") for block in body.get("content", []) if block.get("type") == "text")
         calls = [
@@ -81,6 +100,7 @@ class AnthropicClient:
 
 
 def client_from_environment() -> LLMClient:
+    _load_dotenv()
     provider = os.getenv("EMPORIO_PROVIDER", "openai").casefold()
     model = os.getenv("EMPORIO_MODEL", "gpt-4o-mini")
     key = os.getenv("EMPORIO_API_KEY") or os.getenv("OPENAI_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
