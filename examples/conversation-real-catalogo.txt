@@ -1,6 +1,0 @@
-﻿Tom: Oi! Como posso ajudar com m�sica hoje? (digite 'sair' para encerrar)
-Voc�: {"tool_calls": ["buscar_produtos"]}
-{"tool_calls": []}
-Tom: No momento, n�o temos viol�es dispon�veis nessa faixa de pre�o.
-Voc�: 
-

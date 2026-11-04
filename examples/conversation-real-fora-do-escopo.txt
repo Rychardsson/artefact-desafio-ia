@@ -1,8 +1,0 @@
-﻿Tom: Oi! Como posso ajudar com m�sica hoje? (digite 'sair' para encerrar)
-Voc�: {"tool_calls": ["buscar_produtos"]}
-{"tool_calls": []}
-Tom: Desculpe, n�o consegui confirmar a disponibilidade exata das cordas de viol�o no momento.
-
-Se tiver mais alguma d�vida sobre nossos produtos musicais, � s� perguntar!
-Voc�: 
-

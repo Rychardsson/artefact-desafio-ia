@@ -1,6 +1,0 @@
-﻿Tom: Oi! Como posso ajudar com m�sica hoje? (digite 'sair' para encerrar)
-Voc�: {"tool_calls": ["consultar_politicas"]}
-{"tool_calls": []}
-Tom: Para troca por arrependimento, voc� tem at� 7 dias corridos ap�s o recebimento do produto.
-Voc�: 
-

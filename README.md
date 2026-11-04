@@ -97,7 +97,7 @@ uv run --with pytest pytest
 21 passed
 ```
 
-Os cenários de demonstração estão em [`examples/scenarios.json`](examples/scenarios.json). Três conversas reais executadas com Gemini estão em [`examples/real-conversations.json`](examples/real-conversations.json).
+Os cenários de demonstração estão em [`examples/scenarios.json`](examples/scenarios.json). As três conversas reais executadas com Gemini estão em [`examples/`](examples/), com o índice consolidado em [`examples/real-conversations.json`](examples/real-conversations.json).
 
 ## Limitações conhecidas
 
