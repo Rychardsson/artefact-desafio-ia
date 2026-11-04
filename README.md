@@ -87,7 +87,7 @@ uv run --with pytest pytest
 17 passed
 ```
 
-Os cenários de demonstração estão em [`examples/scenarios.json`](examples/scenarios.json). Para testar uma conversa real, configure a chave e use as perguntas desse arquivo.
+Os cenários de demonstração estão em [`examples/scenarios.json`](examples/scenarios.json). Uma conversa real executada com Gemini está em [`examples/conversation-real-gemini.json`](examples/conversation-real-gemini.json).
 
 ## Limitações conhecidas
 

@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from dataclasses import dataclass
 from typing import Any, Protocol
 from urllib.error import HTTPError, URLError
@@ -17,6 +18,22 @@ def _load_dotenv() -> None:
                 continue
             name, value = stripped.split("=", 1)
             os.environ.setdefault(name.strip(), value.strip().strip("\"'"))
+
+
+def _request_json(request: Request, provider: str) -> dict[str, Any]:
+    for attempt in range(3):
+        try:
+            with urlopen(request, timeout=60) as response:
+                return json.loads(response.read())
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            if error.code in {429, 503} and attempt < 2:
+                time.sleep(2**attempt)
+                continue
+            raise RuntimeError(f"Falha no provedor {provider} ({error.code}): {detail}") from error
+        except (URLError, TimeoutError) as error:
+            raise RuntimeError(f"Falha no provedor {provider}: {error}") from error
+    raise RuntimeError(f"Falha no provedor {provider}: tentativas esgotadas.")
 
 
 @dataclass(frozen=True)
@@ -51,14 +68,7 @@ class OpenAICompatibleClient:
             headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
             method="POST",
         )
-        try:
-            with urlopen(request, timeout=60) as response:
-                body = json.loads(response.read())
-        except HTTPError as error:
-            detail = error.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"Falha no provedor OpenAI-compatível ({error.code}): {detail}") from error
-        except (URLError, TimeoutError) as error:
-            raise RuntimeError(f"Falha no provedor OpenAI-compatível: {error}") from error
+        body = _request_json(request, "OpenAI-compatível")
         choice = body["choices"][0]["message"]
         calls = [
             ToolCall(call["id"], call["function"]["name"], json.loads(call["function"]["arguments"]))
@@ -83,14 +93,7 @@ class AnthropicClient:
             headers={"x-api-key": self.api_key, "anthropic-version": "2023-06-01", "Content-Type": "application/json"},
             method="POST",
         )
-        try:
-            with urlopen(request, timeout=60) as response:
-                body = json.loads(response.read())
-        except HTTPError as error:
-            detail = error.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"Falha no provedor Anthropic ({error.code}): {detail}") from error
-        except (URLError, TimeoutError) as error:
-            raise RuntimeError(f"Falha no provedor Anthropic: {error}") from error
+        body = _request_json(request, "Anthropic")
         text = "".join(block.get("text", "") for block in body.get("content", []) if block.get("type") == "text")
         calls = [
             ToolCall(block["id"], block["name"], block.get("input", {}))

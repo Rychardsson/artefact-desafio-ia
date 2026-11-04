@@ -105,7 +105,21 @@ class Agent:
                     raise RuntimeError("O modelo retornou uma resposta vazia.")
                 self.memory.append({"role": "assistant", "content": answer})
                 return answer
-            messages.append({"role": "assistant", "content": response.text, "tool_calls": [_jsonable(call) for call in response.tool_calls]})
+            messages.append({
+                "role": "assistant",
+                "content": response.text,
+                "tool_calls": [
+                    {
+                        "id": call.call_id,
+                        "type": "function",
+                        "function": {
+                            "name": call.name,
+                            "arguments": json.dumps(call.arguments, ensure_ascii=False),
+                        },
+                    }
+                    for call in response.tool_calls
+                ],
+            })
             for call in response.tool_calls:
                 try:
                     result = self.registry.call(call.name, call.arguments)
