@@ -22,5 +22,13 @@
     "user": "Do you have guitar strings? And who won the game yesterday?",
     "tools": ["search_products"],
     "assistant": "Sorry, I could not confirm the exact availability of guitar strings.\n\nFeel free to ask about our music products."
+  },
+  {
+    "provider": "Gemini via OpenAI-compatible API",
+    "model": "gemini-2.5-flash",
+    "scenario": "store-information",
+    "user": "What is the store address, phone number, email, and opening hours?",
+    "tools": ["get_store_information"],
+    "assistant": "The store address is Rua 14 de Maio, 3200 - Centro, Campo Grande - MS, CEP 79202-333. You can reach us by phone at (67) 3341-4444 or by email at contato@emporiodamusica.com.br.\n\nWe are open from Monday to Friday, 9 AM to 6 PM."
   }
 ]
